@@ -21,12 +21,10 @@ class SpentController {
     let queryParams;
 
     if (!isNaN(page)) {
-        // Se o parâmetro de página for um número, continue com a consulta normal de paginação
         const offset = (page - 1) * itemsPerPage;
         queryStr = "SELECT a.id, b.name, a.value::FLOAT, a.datetime FROM spents AS a LEFT JOIN products AS b ON a.idproduct = b.id WHERE a.iduser = $1 ORDER BY a.datetime DESC LIMIT $2 OFFSET $3";
         queryParams = [iduser, itemsPerPage, offset];
     } else {
-        // Se o parâmetro de página não for um número, modifique a consulta para buscar todos os resultados
         queryStr = "SELECT a.id, b.name, a.value::FLOAT, a.datetime FROM spents AS a LEFT JOIN products AS b ON a.idproduct = b.id WHERE a.iduser = $1 ORDER BY a.datetime DESC";
         queryParams = [iduser];
     }
@@ -41,7 +39,6 @@ class SpentController {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     let currentPage = page;
 
-    // Se a página solicitada for maior que o número total de páginas, ajuste para a última página disponível
     if (currentPage > totalPages) {
         currentPage = totalPages;
         const offset = (currentPage - 1) * itemsPerPage;
